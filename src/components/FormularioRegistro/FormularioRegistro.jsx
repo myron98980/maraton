@@ -1,174 +1,76 @@
 import React, { useState } from 'react';
 import Select, { components } from 'react-select'; 
 import './FormularioRegistro.css';
-// Importamos AMBAS imágenes de cabecera
 import headerImageDesktop from '../../assets/form-header.png';
-import headerImageMobile from '../../assets/form-header-mobile.png'; // Asegúrate de haber guardado esta imagen
-// Importamos todos los iconos necesarios
+import headerImageMobile from '../../assets/form-header-mobile.png';
 import { FaUser, FaBirthdayCake, FaVenusMars, FaGlobeAmericas, FaListAlt, FaMars, FaVenus, FaCheckCircle } from 'react-icons/fa';
 
-// Opciones para el selector de Sexo con iconos
 const opcionesSexo = [
-  { value: 'MASCULINO', label: 'Masculino' },
-  { value: 'FEMENINO', label: 'Femenino'  }
+  { value: 'MASCULINO', label: 'Masculino', },
+  { value: 'FEMENINO', label: 'Femenino', }
 ];
-
-// Opciones para el selector de Categoría
 const opcionesCategoria = [
   { value: 'JUVENIL', label: 'Juvenil: 15 a 20 años' },
   { value: 'LIBRE', label: 'Libre: A partir de 21 años' },
   { value: 'PCD', label: 'PCD' }
 ];
 
-// Estilos personalizados BASE para react-select
+// ===== CAMBIO CLAVE PARA SELECTORES =====
 const customStyles = {
+  // 1. Estilo del contenedor principal (afecta al placeholder)
   control: (provided) => ({
     ...provided,
     backgroundColor: 'transparent',
     border: 'none',
     boxShadow: 'none',
-    fontSize: '1.3rem',
+    fontSize: '1.2rem', // <-- Tamaño grande para el placeholder
     color: '#34495e',
     minHeight: 'auto',
     height: '100%',
     cursor: 'pointer',
   }),
-  menu: (provided) => ({
+  // 2. Estilo del VALOR YA SELECCIONADO
+  singleValue: (provided) => ({
     ...provided,
-    marginTop: '8px',
-    borderRadius: '12px',
-    boxShadow: '0 6px 25px rgba(0, 0, 0, 0.1)',
-    border: '1px solid #e0e0e0',
-    overflow: 'hidden',
+    color: '#34495e',
+    display: 'flex',
+    alignItems: 'center',
+    fontSize: '1rem', // <-- Tamaño pequeño para el valor
   }),
+  // 3. Estilo de las OPCIONES en el menú desplegable
   option: (provided, state) => ({
     ...provided,
-    fontSize: '1.2rem',
+    fontSize: '1rem', // <-- Tamaño pequeño para las opciones
     backgroundColor: state.isSelected ? '#007bff' : (state.isFocused ? '#eaf4ff' : 'white'),
     color: state.isSelected ? 'white' : '#333',
     padding: '16px',
     cursor: 'pointer',
     transition: 'all 0.2s ease',
   }),
-  singleValue: (provided) => ({
-    ...provided,
-    color: '#34495e',
-    display: 'flex',
-    alignItems: 'center',
-  }),
-  placeholder: (provided) => ({
-    ...provided,
-    color: '#bdc3c7',
-  }),
-  indicatorSeparator: () => ({
-    display: 'none',
-  }),
-  dropdownIndicator: (provided) => ({
-    ...provided,
-    color: '#34495e',
-  }),
-  // Añadimos el estilo para el portal para evitar que el menú se corte
+  menu: (provided) => ({ ...provided, marginTop: '8px', borderRadius: '12px', boxShadow: '0 6px 25px rgba(0, 0, 0, 0.1)', border: '1px solid #e0e0e0', overflow: 'hidden', }),
+  placeholder: (provided) => ({ ...provided, color: '#bdc3c7', }),
+  indicatorSeparator: () => ({ display: 'none', }),
+  dropdownIndicator: (provided) => ({ ...provided, color: '#34495e', }),
   menuPortal: base => ({ ...base, zIndex: 9999 })
 };
 
-// =======================================================
-// ===== CAMBIO: CREAMOS UN NUEVO OBJETO DE ESTILOS =====
-// =======================================================
-// Hereda todo de customStyles y solo sobreescribe el tamaño de la fuente de las opciones.
-const categoriaStyles = {
-  ...customStyles, // Hereda todos los estilos base
-  option: (provided, state) => ({
-    ...customStyles.option(provided, state), // Mantiene los colores y padding de las opciones base
-    fontSize: '0.8rem', // <-- ¡EL CAMBIO! Reduce el tamaño de la fuente solo para este estilo
-  }),
-  singleValue: (provided) => ({
-    ...customStyles.singleValue(provided),
-    fontSize: '1rem', // <-- ¡EL ARREGLO! Un tamaño intermedio para que se vea bien
-  }),
-};
-
-
-// Componente personalizado para renderizar las opciones con icono
+// ... (El resto de componentes y lógica se mantiene igual) ...
 const { Option } = components;
-const IconOption = (props) => (
-  <Option {...props}>
-    <div className="option-with-icon">
-      {props.data.icon}
-      <span>{props.data.label}</span>
-    </div>
-  </Option>
-);
-
-// Componente personalizado para renderizar el valor seleccionado con icono
+const IconOption = (props) => ( <Option {...props}> <div className="option-with-icon"> {props.data.icon} <span>{props.data.label}</span> </div> </Option>);
 const { SingleValue } = components;
-const IconSingleValue = (props) => (
-  <SingleValue {...props}>
-    <div className="option-with-icon">
-      {props.data.icon}
-      <span>{props.data.label}</span>
-    </div>
-  </SingleValue>
-);
-
-// Objeto con el estado inicial del formulario para poder resetearlo fácilmente
-const initialState = {
-  nombres: '',
-  apellidos: '',
-  edad: '',
-  sexo: null,
-  categoria: null,
-  nacionalidad: '',
-};
+const IconSingleValue = (props) => ( <SingleValue {...props}> <div className="option-with-icon"> {props.data.icon} <span>{props.data.label}</span> </div> </SingleValue>);
+const initialState = { nombres: '', apellidos: '', edad: '', sexo: null, categoria: null, nacionalidad: '', };
 
 const FormularioRegistro = () => {
   const [formData, setFormData] = useState(initialState);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    const camposMayusculas = ['nombres', 'apellidos', 'nacionalidad'];
-    const valorProcesado = camposMayusculas.includes(name) ? value.toUpperCase() : value;
-    setFormData({ ...formData, [name]: valorProcesado });
-  };
-
-  const handleSelectChange = (selectedOption, action) => {
-    setFormData({ ...formData, [action.name]: selectedOption });
-  };
+  const handleInputChange = (e) => { const { name, value } = e.target; const camposMayusculas = ['nombres', 'apellidos', 'nacionalidad']; const valorProcesado = camposMayusculas.includes(name) ? value.toUpperCase() : value; setFormData({ ...formData, [name]: valorProcesado }); };
+  const handleSelectChange = (selectedOption, action) => { setFormData({ ...formData, [action.name]: selectedOption }); };
+  const handleSubmit = async (e) => { e.preventDefault(); setIsSubmitting(true); const scriptURL = process.env.REACT_APP_GOOGLE_SCRIPT_URL; const formDataObject = new FormData(); formDataObject.append('nombres', formData.nombres); formDataObject.append('apellidos', formData.apellidos); formDataObject.append('edad', formData.edad); formDataObject.append('sexo', formData.sexo ? formData.sexo.value : ''); formDataObject.append('nacionalidad', formData.nacionalidad); formDataObject.append('categoria', formData.categoria ? formData.categoria.value : ''); try { const response = await fetch(scriptURL, { method: 'POST', body: formDataObject }); if (response.ok) { setShowSuccess(true); } else { throw new Error('Falló la respuesta del servidor.'); } } catch (error) { console.error('Error!', error.message); alert('Error al guardar el registro. Inténtalo de nuevo.'); } finally { setIsSubmitting(false); } };
+  const handleReset = () => { setFormData(initialState); setShowSuccess(false); };
   
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-
-    const scriptURL = process.env.REACT_APP_GOOGLE_SCRIPT_URL;
-    const formDataObject = new FormData();
-    formDataObject.append('nombres', formData.nombres);
-    formDataObject.append('apellidos', formData.apellidos);
-    formDataObject.append('edad', formData.edad);
-    formDataObject.append('sexo', formData.sexo ? formData.sexo.value : '');
-    formDataObject.append('nacionalidad', formData.nacionalidad);
-    formDataObject.append('categoria', formData.categoria ? formData.categoria.value : '');
-
-    try {
-      const response = await fetch(scriptURL, { method: 'POST', body: formDataObject });
-      if (response.ok) {
-        setShowSuccess(true); 
-      } else {
-         throw new Error('Falló la respuesta del servidor.');
-      }
-    } catch (error) {
-      console.error('Error!', error.message);
-      alert('Error al guardar el registro. Inténtalo de nuevo.');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const handleReset = () => {
-    setFormData(initialState);
-    setShowSuccess(false);
-  };
-
   return (
     <div className="form-container">
       <img src={headerImageDesktop} alt="Form Header" className="form-header-img desktop-header" />
@@ -187,18 +89,9 @@ const FormularioRegistro = () => {
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="form-body">
-            <div className="input-group">
-              <FaUser className="input-icon" />
-              <input type="text" name="nombres" placeholder="Nombres" className="input-field" value={formData.nombres} onChange={handleInputChange} required />
-            </div>
-            <div className="input-group">
-              <FaUser className="input-icon" />
-              <input type="text" name="apellidos" placeholder="Apellidos" className="input-field" value={formData.apellidos} onChange={handleInputChange} required />
-            </div>
-            <div className="input-group">
-              <FaBirthdayCake className="input-icon" />
-              <input type="number" name="edad" placeholder="Edad" className="input-field" value={formData.edad} onChange={handleInputChange} required />
-            </div>
+            <div className="input-group"><FaUser className="input-icon" /><input type="text" name="nombres" placeholder="Nombres" className="input-field" value={formData.nombres} onChange={handleInputChange} required /></div>
+            <div className="input-group"><FaUser className="input-icon" /><input type="text" name="apellidos" placeholder="Apellidos" className="input-field" value={formData.apellidos} onChange={handleInputChange} required /></div>
+            <div className="input-group"><FaBirthdayCake className="input-icon" /><input type="number" name="edad" placeholder="Edad" className="input-field" value={formData.edad} onChange={handleInputChange} required /></div>
             <div className="input-group">
               <FaVenusMars className="input-icon" />
               <Select
@@ -219,8 +112,7 @@ const FormularioRegistro = () => {
                 name="categoria" 
                 value={formData.categoria} 
                 options={opcionesCategoria} 
-                // ===== CAMBIO: Aplicamos los nuevos estilos aquí =====
-                styles={categoriaStyles} 
+                styles={customStyles} // Todos usan los mismos estilos ahora
                 placeholder="Selecciona una Categoría" 
                 onChange={handleSelectChange} 
                 isSearchable={false} 
