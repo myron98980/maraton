@@ -81,6 +81,10 @@ const categoriaStyles = {
     ...customStyles.option(provided, state), // Mantiene los colores y padding de las opciones base
     fontSize: '0.8rem', // <-- ¡EL CAMBIO! Reduce el tamaño de la fuente solo para este estilo
   }),
+  singleValue: (provided) => ({
+    ...customStyles.singleValue(provided),
+    fontSize: '1rem', // <-- ¡EL ARREGLO! Un tamaño intermedio para que se vea bien
+  }),
 };
 
 
