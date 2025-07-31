@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import Select, { components } from 'react-select'; 
 import './FormularioRegistro.css';
-// 1. Importamos AMBAS imágenes de cabecera
+// Importamos AMBAS imágenes de cabecera
 import headerImageDesktop from '../../assets/form-header.png';
 import headerImageMobile from '../../assets/form-header-mobile.png'; // Asegúrate de haber guardado esta imagen
-// 2. Importamos todos los iconos necesarios
+// Importamos todos los iconos necesarios
 import { FaUser, FaBirthdayCake, FaVenusMars, FaGlobeAmericas, FaListAlt, FaMars, FaVenus, FaCheckCircle } from 'react-icons/fa';
 
 // Opciones para el selector de Sexo con iconos
@@ -20,7 +20,7 @@ const opcionesCategoria = [
   { value: 'PCD', label: 'PCD' }
 ];
 
-// Estilos personalizados para react-select
+// Estilos personalizados BASE para react-select
 const customStyles = {
   control: (provided) => ({
     ...provided,
@@ -67,7 +67,22 @@ const customStyles = {
     ...provided,
     color: '#34495e',
   }),
+  // Añadimos el estilo para el portal para evitar que el menú se corte
+  menuPortal: base => ({ ...base, zIndex: 9999 })
 };
+
+// =======================================================
+// ===== CAMBIO: CREAMOS UN NUEVO OBJETO DE ESTILOS =====
+// =======================================================
+// Hereda todo de customStyles y solo sobreescribe el tamaño de la fuente de las opciones.
+const categoriaStyles = {
+  ...customStyles, // Hereda todos los estilos base
+  option: (provided, state) => ({
+    ...customStyles.option(provided, state), // Mantiene los colores y padding de las opciones base
+    fontSize: '1rem', // <-- ¡EL CAMBIO! Reduce el tamaño de la fuente solo para este estilo
+  }),
+};
+
 
 // Componente personalizado para renderizar las opciones con icono
 const { Option } = components;
@@ -152,7 +167,6 @@ const FormularioRegistro = () => {
 
   return (
     <div className="form-container">
-      {/* 3. Renderizamos AMBAS imágenes con sus clases respectivas */}
       <img src={headerImageDesktop} alt="Form Header" className="form-header-img desktop-header" />
       <img src={headerImageMobile} alt="Form Header Mobile" className="form-header-img mobile-header" />
 
@@ -183,7 +197,10 @@ const FormularioRegistro = () => {
             </div>
             <div className="input-group">
               <FaVenusMars className="input-icon" />
-              <Select classNamePrefix="custom-select" name="sexo" value={formData.sexo} options={opcionesSexo} styles={customStyles} placeholder="Selecciona tu Sexo" onChange={handleSelectChange} isSearchable={false} components={{ Option: IconOption, SingleValue: IconSingleValue }} required />
+              <Select
+                menuPosition={'fixed'}
+                menuPortalTarget={document.body}
+                classNamePrefix="custom-select" name="sexo" value={formData.sexo} options={opcionesSexo} styles={customStyles} placeholder="Selecciona tu Sexo" onChange={handleSelectChange} isSearchable={false} components={{ Option: IconOption, SingleValue: IconSingleValue }} required />
             </div>
             <div className="input-group">
               <FaGlobeAmericas className="input-icon" />
@@ -191,7 +208,20 @@ const FormularioRegistro = () => {
             </div>
             <div className="input-group">
               <FaListAlt className="input-icon" />
-              <Select classNamePrefix="custom-select" name="categoria" value={formData.categoria} options={opcionesCategoria} styles={customStyles} placeholder="Selecciona una Categoría" onChange={handleSelectChange} isSearchable={false} required />
+              <Select
+                menuPosition={'fixed'}
+                menuPortalTarget={document.body}
+                classNamePrefix="custom-select" 
+                name="categoria" 
+                value={formData.categoria} 
+                options={opcionesCategoria} 
+                // ===== CAMBIO: Aplicamos los nuevos estilos aquí =====
+                styles={categoriaStyles} 
+                placeholder="Selecciona una Categoría" 
+                onChange={handleSelectChange} 
+                isSearchable={false} 
+                required 
+              />
             </div>
             <button type="submit" className="btn-submit" disabled={isSubmitting}>
               {isSubmitting ? 'Registrando...' : 'Registrar'}
