@@ -9,8 +9,8 @@ import { FaUser, FaBirthdayCake, FaVenusMars, FaGlobeAmericas, FaListAlt, FaMars
 
 // Opciones para el selector de Sexo con iconos
 const opcionesSexo = [
-  { value: 'MASCULINO', label: 'Masculino', icon: <FaMars /> },
-  { value: 'FEMENINO', label: 'Femenino', icon: <FaVenus /> }
+  { value: 'MASCULINO', label: 'Masculino' /> },
+  { value: 'FEMENINO', label: 'Femenino' /> }
 ];
 
 // Opciones para el selector de Categoría
