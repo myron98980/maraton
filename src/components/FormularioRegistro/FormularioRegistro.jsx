@@ -183,7 +183,7 @@ const FormularioRegistro = () => {
             </div>
             <div className="input-group">
               <FaVenusMars className="input-icon" />
-              <Select classNamePrefix="custom-select" name="sexo" value={formData.sexo} options={opcionesSexo} styles={customStyles} placeholder="Sexo" onChange={handleSelectChange} isSearchable={false} components={{ Option: IconOption, SingleValue: IconSingleValue }} required />
+              <Select classNamePrefix="custom-select" name="sexo" value={formData.sexo} options={opcionesSexo} styles={customStyles} placeholder="Selecciona tu Sexo" onChange={handleSelectChange} isSearchable={false} components={{ Option: IconOption, SingleValue: IconSingleValue }} required />
             </div>
             <div className="input-group">
               <FaGlobeAmericas className="input-icon" />
@@ -191,7 +191,7 @@ const FormularioRegistro = () => {
             </div>
             <div className="input-group">
               <FaListAlt className="input-icon" />
-              <Select classNamePrefix="custom-select" name="categoria" value={formData.categoria} options={opcionesCategoria} styles={customStyles} placeholder="Categoría" onChange={handleSelectChange} isSearchable={false} required />
+              <Select classNamePrefix="custom-select" name="categoria" value={formData.categoria} options={opcionesCategoria} styles={customStyles} placeholder="Selecciona una Categoría" onChange={handleSelectChange} isSearchable={false} required />
             </div>
             <button type="submit" className="btn-submit" disabled={isSubmitting}>
               {isSubmitting ? 'Registrando...' : 'Registrar'}
