@@ -79,7 +79,7 @@ const categoriaStyles = {
   ...customStyles, // Hereda todos los estilos base
   option: (provided, state) => ({
     ...customStyles.option(provided, state), // Mantiene los colores y padding de las opciones base
-    fontSize: '0.5rem', // <-- ¡EL CAMBIO! Reduce el tamaño de la fuente solo para este estilo
+    fontSize: '0.8rem', // <-- ¡EL CAMBIO! Reduce el tamaño de la fuente solo para este estilo
   }),
 };
 
