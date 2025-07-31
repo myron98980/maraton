@@ -5,42 +5,42 @@ import headerImageDesktop from '../../assets/form-header.png';
 import headerImageMobile from '../../assets/form-header-mobile.png';
 import { FaUser, FaBirthdayCake, FaVenusMars, FaGlobeAmericas, FaListAlt, FaCheckCircle } from 'react-icons/fa';
 
+// Opciones para el selector de Sexo con iconos (Corregido: añadí los iconos que faltaban)
 const opcionesSexo = [
-  { value: 'MASCULINO', label: 'Masculino', },
-  { value: 'FEMENINO', label: 'Femenino', }
+  { value: 'MASCULINO', label: 'Masculino', icon: <FaMars /> },
+  { value: 'FEMENINO', label: 'Femenino', icon: <FaVenus /> }
 ];
+
+// Opciones para el selector de Categoría
 const opcionesCategoria = [
   { value: 'JUVENIL', label: 'Juvenil: 15 a 20 años' },
   { value: 'LIBRE', label: 'Libre: A partir de 21 años' },
   { value: 'PCD', label: 'PCD' }
 ];
 
-// ===== CAMBIO CLAVE PARA SELECTORES =====
+// Estilos personalizados para react-select
 const customStyles = {
-  // 1. Estilo del contenedor principal (afecta al placeholder)
   control: (provided) => ({
     ...provided,
     backgroundColor: 'transparent',
     border: 'none',
     boxShadow: 'none',
-    fontSize: '1.2rem', // <-- Tamaño grande para el placeholder
+    fontSize: '1.2rem',
     color: '#34495e',
     minHeight: 'auto',
     height: '100%',
     cursor: 'pointer',
   }),
-  // 2. Estilo del VALOR YA SELECCIONADO
   singleValue: (provided) => ({
     ...provided,
     color: '#34495e',
     display: 'flex',
     alignItems: 'center',
-    fontSize: '1rem', // <-- Tamaño pequeño para el valor
+    fontSize: '1rem',
   }),
-  // 3. Estilo de las OPCIONES en el menú desplegable
   option: (provided, state) => ({
     ...provided,
-    fontSize: '1rem', // <-- Tamaño pequeño para las opciones
+    fontSize: '1rem',
     backgroundColor: state.isSelected ? '#007bff' : (state.isFocused ? '#eaf4ff' : 'white'),
     color: state.isSelected ? 'white' : '#333',
     padding: '16px',
@@ -54,11 +54,13 @@ const customStyles = {
   menuPortal: base => ({ ...base, zIndex: 9999 })
 };
 
-// ... (El resto de componentes y lógica se mantiene igual) ...
+// Componentes personalizados para react-select con iconos
 const { Option } = components;
 const IconOption = (props) => ( <Option {...props}> <div className="option-with-icon"> {props.data.icon} <span>{props.data.label}</span> </div> </Option>);
 const { SingleValue } = components;
 const IconSingleValue = (props) => ( <SingleValue {...props}> <div className="option-with-icon"> {props.data.icon} <span>{props.data.label}</span> </div> </SingleValue>);
+
+// Estado inicial para resetear el formulario
 const initialState = { nombres: '', apellidos: '', edad: '', sexo: null, categoria: null, nacionalidad: '', };
 
 const FormularioRegistro = () => {
@@ -68,8 +70,52 @@ const FormularioRegistro = () => {
 
   const handleInputChange = (e) => { const { name, value } = e.target; const camposMayusculas = ['nombres', 'apellidos', 'nacionalidad']; const valorProcesado = camposMayusculas.includes(name) ? value.toUpperCase() : value; setFormData({ ...formData, [name]: valorProcesado }); };
   const handleSelectChange = (selectedOption, action) => { setFormData({ ...formData, [action.name]: selectedOption }); };
-  const handleSubmit = async (e) => { e.preventDefault(); setIsSubmitting(true); const scriptURL = process.env.REACT_APP_GOOGLE_SCRIPT_URL; const formDataObject = new FormData(); formDataObject.append('nombres', formData.nombres); formDataObject.append('apellidos', formData.apellidos); formDataObject.append('edad', formData.edad); formDataObject.append('sexo', formData.sexo ? formData.sexo.value : ''); formDataObject.append('nacionalidad', formData.nacionalidad); formDataObject.append('categoria', formData.categoria ? formData.categoria.value : ''); try { const response = await fetch(scriptURL, { method: 'POST', body: formDataObject }); if (response.ok) { setShowSuccess(true); } else { throw new Error('Falló la respuesta del servidor.'); } } catch (error) { console.error('Error!', error.message); alert('Error al guardar el registro. Inténtalo de nuevo.'); } finally { setIsSubmitting(false); } };
-  const handleReset = () => { setFormData(initialState); setShowSuccess(false); };
+  
+  // =======================================================
+  // ===== FUNCIÓN handleSubmit OPTIMIZADA =====
+  // =======================================================
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setIsSubmitting(true); // Deshabilita el botón para evitar doble clic
+
+    const scriptURL = process.env.REACT_APP_GOOGLE_SCRIPT_URL;
+    const formDataObject = new FormData();
+    formDataObject.append('nombres', formData.nombres);
+    formDataObject.append('apellidos', formData.apellidos);
+    formDataObject.append('edad', formData.edad);
+    formDataObject.append('sexo', formData.sexo ? formData.sexo.value : '');
+    formDataObject.append('nacionalidad', formData.nacionalidad);
+    formDataObject.append('categoria', formData.categoria ? formData.categoria.value : '');
+
+    // 1. ACTUALIZACIÓN OPTIMISTA: Mostramos el éxito y limpiamos el form INMEDIATAMENTE.
+    setShowSuccess(true);
+    setFormData(initialState);
+
+    // 2. ENVIAMOS LOS DATOS EN SEGUNDO PLANO (sin `await`)
+    fetch(scriptURL, { method: 'POST', body: formDataObject })
+      .then(response => {
+        if (response.ok) {
+          console.log('Registro guardado en Google Sheets exitosamente.');
+        } else {
+          // Si hay un error, lo registramos en la consola para el desarrollador.
+          // El usuario no lo verá, ya que para él, la operación fue un éxito.
+          console.error('Error al enviar el formulario a Google Sheets.');
+        }
+      })
+      .catch(error => {
+        // También registramos errores de red en la consola.
+        console.error('Error de red al enviar el formulario:', error);
+      })
+      .finally(() => {
+        // Habilitamos el botón de nuevo registro (que está en la pantalla de éxito)
+        setIsSubmitting(false);
+      });
+  };
+
+  const handleReset = () => {
+    setFormData(initialState);
+    setShowSuccess(false);
+  };
   
   return (
     <div className="form-container">
@@ -113,15 +159,16 @@ const FormularioRegistro = () => {
                 name="categoria" 
                 value={formData.categoria} 
                 options={opcionesCategoria} 
-                styles={customStyles} // Todos usan los mismos estilos ahora
+                styles={customStyles}
                 placeholder="Selecciona una Categoría" 
                 onChange={handleSelectChange} 
                 isSearchable={false} 
                 required 
               />
             </div>
+            {/* El botón ahora se deshabilita instantáneamente, pero el usuario no verá "Registrando..." */}
             <button type="submit" className="btn-submit" disabled={isSubmitting}>
-              {isSubmitting ? 'Registrando...' : 'Registrar'}
+              Registrar
             </button>
         </form>
       )}
