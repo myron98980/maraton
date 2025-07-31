@@ -106,6 +106,7 @@ const FormularioRegistro = () => {
             <div className="input-group">
               <FaListAlt className="input-icon" />
               <Select
+                 menuPlacement="top"
                 menuPosition={'fixed'}
                 menuPortalTarget={document.body}
                 classNamePrefix="custom-select" 
