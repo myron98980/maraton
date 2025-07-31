@@ -1,8 +1,6 @@
 .form-container {
-  /* Mantenemos el tamaño de ancho que funcionaba bien */
   width: 100%;
   max-width: 580px;
-
   background-color: white;
   border-radius: 30px;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
@@ -12,8 +10,6 @@
   box-sizing: border-box;
   margin: 20px;
 }
-
-/* === Estilos para react-select (se mantienen igual) === */
 .custom-select__container {
   width: 100%;
 }
@@ -22,38 +18,29 @@
   align-items: center;
   gap: 12px;
 }
-
-/* --- ESTILOS INTERNOS DEL FORMULARIO (CON ESPACIOS REDUCIDOS) --- */
 .form-header-img {
   width: 100%;
   height: auto;
   display: block;
 }
-
 .form-title {
-  font-size: 2.5rem; 
+  font-size: 2rem; 
   font-weight: 900;
   color: #2c3e50;
-  /* CAMBIO: Reducimos los márgenes verticales del título */
   margin: 30px 0 35px 0; 
   text-align: center;
   text-transform: uppercase;
 }
-
 .form-body {
-  /* CAMBIO: Reducimos el padding inferior */
   padding: 0 60px 40px 60px;
 }
-
 .input-group {
   display: flex;
   align-items: center;
   border-bottom: 2px solid #ecf0f1;
-  /* CAMBIO: Reducimos drásticamente la separación entre campos */
   margin-bottom: 25px; 
   padding-bottom: 8px;
 }
-
 .input-icon {
   color: #95a5a6;
   margin-right: 25px;
@@ -62,22 +49,26 @@
   text-align: center;
 }
 
+/* ===== CAMBIO CLAVE PARA INPUTS ===== */
 .input-field {
   border: none;
   outline: none;
   background: none;
   width: 100%;
-  font-size: 1.3rem;
+  /* 1. Este es el tamaño por defecto (para el placeholder) */
+  font-size: 1.2rem;
   color: #34495e;
+}
+/* 2. Este estilo se aplica SOLO cuando hay texto escrito */
+.input-field:not(:placeholder-shown) {
+  font-size: 1rem;
 }
 
 .input-field::placeholder {
   color: #bdc3c7;
 }
-
 .btn-submit {
   width: 100%;
-  /* CAMBIO: Hacemos el botón un poco menos alto */
   padding: 18px; 
   background: linear-gradient(90deg, #007bff, #00bfff);
   border: none;
@@ -87,90 +78,22 @@
   font-weight: bold;
   cursor: pointer;
   transition: all 0.3s ease;
-  /* CAMBIO: Reducimos el espacio sobre el botón */
   margin-top: 30px; 
   text-transform: uppercase;
 }
-
 .btn-submit:hover {
   box-shadow: 0 10px 25px rgba(0, 150, 255, 0.5);
   transform: translateY(-3px);
 }
-
-/* ---- Estilos para el Contenedor de Éxito ---- */
-
-.success-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 40px 60px 60px 60px; /* Padding similar al del form-body */
-}
-
-.success-icon {
-  font-size: 6rem; /* Icono grande */
-  color: #28a745; /* Verde éxito */
-  margin-bottom: 25px;
-}
-
-.success-title {
-  font-size: 2rem;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 15px;
-}
-
-.success-text {
-  font-size: 1.1rem;
-  color: #555;
-  line-height: 1.6;
-  margin-bottom: 35px;
-  max-width: 400px; /* Para que el texto no sea demasiado ancho */
-}
-
-.btn-reset {
-  padding: 15px 30px;
-  font-size: 1rem;
-  font-weight: bold;
-  color: #007bff; /* Color primario del botón */
-  background-color: transparent;
-  border: 2px solid #007bff;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.btn-reset:hover {
-  background-color: #007bff;
-  color: white;
-}
-
-/* ---- Estilos para las Imágenes de Cabecera Responsivas ---- */
-
-/* Por defecto (en escritorio), ocultamos la cabecera móvil. */
-.mobile-header {
-  display: none;
-}
-
-/* Y nos aseguramos que la de escritorio esté visible */
-.desktop-header {
-  display: block;
-}
-
-
-/* ---- RESPONSIVIDAD PARA MÓVILES Y TABLETS PEQUEÑAS ---- */
+.success-container { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 40px 60px 60px 60px; }
+.success-icon { font-size: 6rem; color: #28a745; margin-bottom: 25px; }
+.success-title { font-size: 2rem; font-weight: bold; color: #333; margin-bottom: 15px; }
+.success-text { font-size: 1.1rem; color: #555; line-height: 1.6; margin-bottom: 35px; max-width: 400px; }
+.btn-reset { padding: 15px 30px; font-size: 1rem; font-weight: bold; color: #007bff; background-color: transparent; border: 2px solid #007bff; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; }
+.btn-reset:hover { background-color: #007bff; color: white; }
+.mobile-header { display: none; }
+.desktop-header { display: block; }
 @media (max-width: 768px) {
-  
-  /* Cuando la pantalla es pequeña, INVERTIMOS la visibilidad. */
-  
-  /* Ocultamos la cabecera de escritorio. */
-  .desktop-header {
-    display: none;
-  }
-  
-  /* Mostramos la cabecera móvil. */
-  .mobile-header {
-    display: block;
-  }
+  .desktop-header { display: none; }
+  .mobile-header { display: block; }
 }
