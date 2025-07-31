@@ -1,0 +1,102 @@
+.registro-container {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+}
+
+/* Estilo común para ambos paneles, simple y efectivo */
+.panel {
+  flex: 1; /* Esto crea la división 50/50 */
+  display: flex;
+  flex-direction: column;
+  padding: 40px;
+  box-sizing: border-box;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+/* --- PANEL IZQUIERDO (IMAGEN) --- */
+.panel-izquierdo {
+  background-size: cover;
+  background-position: center;
+  color: white;
+  justify-content: space-between;
+}
+
+/* --- PANEL DERECHO (FORMULARIO) --- */
+.panel-derecho {
+  /* Su única misión es centrar perfectamente su contenido */
+  justify-content: center;
+  align-items: center;
+  background-color: #fdfdfe;
+}
+
+/* ---- Estilos de los elementos internos (versión original) ---- */
+.panel-header {
+  text-align: left;
+}
+.btn {
+  padding: 10px 25px;
+  border: 1px solid white;
+  background-color: transparent;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 5px;
+  margin-right: 10px;
+  transition: all 0.3s ease;
+}
+.btn:hover {
+    background-color: white;
+    color: black;
+}
+.btn-register-active {
+  background-color: #00c853;
+  border-color: #00c853;
+}
+.panel-contenido {
+  max-width: 450px;
+}
+.panel-contenido h1 {
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+}
+.panel-contenido p {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+/* ---- RESPONSIVIDAD PARA MÓVILES Y TABLETS PEQUEÑAS ---- */
+@media (max-width: 768px) {
+
+  /* 1. Le decimos al contenedor principal que apile los elementos verticalmente.
+     Aunque solo se verá uno, es una buena práctica. */
+  .registro-container {
+    flex-direction: column;
+  }
+
+  /* 2. Ocultamos completamente el panel del flyer.
+     'display: none' lo elimina del layout como si no existiera. */
+  .panel-izquierdo {
+    display: none;
+  }
+
+  /* 3. Hacemos que el panel del formulario ocupe todo el ancho disponible. */
+  .panel-derecho {
+    width: 100%;
+    flex: 1; /* Asegura que ocupe todo el espacio vertical */
+    padding: 20px; /* Reducimos el padding para pantallas más pequeñas */
+  }
+
+  /* 4. Opcional pero recomendado: Aseguramos que el formulario no sea
+     excesivamente grande dentro del panel. */
+  /* Este selector apunta al .form-container que es HIJO de un .panel-derecho */
+  .panel-derecho .form-container {
+    margin: 0; /* Quitamos el margen para que ocupe más espacio en móvil */
+    width: 100%;
+    max-width: 100%; /* Permitimos que ocupe el ancho completo */
+    height: 100%;
+    border-radius: 0;
+  }
+}
