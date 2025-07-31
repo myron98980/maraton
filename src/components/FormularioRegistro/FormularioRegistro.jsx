@@ -121,7 +121,7 @@ const FormularioRegistro = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbzl7EA0VAmcMVU9-cUl4WBIMeMT4LnCuvjfAOnG4BXTZAyIynkdLzeLJr6fS5eNp5nI/exec';
+    const scriptURL = process.env.REACT_APP_GOOGLE_SCRIPT_URL;
     const formDataObject = new FormData();
     formDataObject.append('nombres', formData.nombres);
     formDataObject.append('apellidos', formData.apellidos);
