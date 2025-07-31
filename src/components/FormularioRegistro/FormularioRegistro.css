@@ -10,6 +10,8 @@
   box-sizing: border-box;
   margin: 20px;
 }
+
+/* === Estilos para react-select (alineación y iconos) === */
 .custom-select__container {
   width: 100%;
 }
@@ -18,6 +20,8 @@
   align-items: center;
   gap: 12px;
 }
+
+/* --- ESTILOS INTERNOS DEL FORMULARIO (VISTA DE ESCRITORIO) --- */
 .form-header-img {
   width: 100%;
   height: auto;
@@ -49,19 +53,14 @@
   text-align: center;
 }
 
-/* ===== CAMBIO CLAVE PARA INPUTS ===== */
+/* Tamaño de fuente para ESCRITORIO */
 .input-field {
   border: none;
   outline: none;
   background: none;
   width: 100%;
-  /* 1. Este es el tamaño por defecto (para el placeholder) */
-  font-size: 1.2rem;
+  font-size: 1.3rem; /* Tamaño grande para escritorio */
   color: #34495e;
-}
-/* 2. Este estilo se aplica SOLO cuando hay texto escrito */
-.input-field:not(:placeholder-shown) {
-  font-size: 1rem;
 }
 
 .input-field::placeholder {
@@ -85,15 +84,49 @@
   box-shadow: 0 10px 25px rgba(0, 150, 255, 0.5);
   transform: translateY(-3px);
 }
+
+/* --- Estilos para la pantalla de éxito --- */
 .success-container { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 40px 60px 60px 60px; }
 .success-icon { font-size: 6rem; color: #28a745; margin-bottom: 25px; }
 .success-title { font-size: 2rem; font-weight: bold; color: #333; margin-bottom: 15px; }
 .success-text { font-size: 1.1rem; color: #555; line-height: 1.6; margin-bottom: 35px; max-width: 400px; }
 .btn-reset { padding: 15px 30px; font-size: 1rem; font-weight: bold; color: #007bff; background-color: transparent; border: 2px solid #007bff; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; }
 .btn-reset:hover { background-color: #007bff; color: white; }
+
+/* --- Estilos para las cabeceras responsivas --- */
 .mobile-header { display: none; }
 .desktop-header { display: block; }
+
+/* ======================================================= */
+/* ===== RESPONSIVIDAD PARA MÓVILES (CAMBIOS AQUÍ) ===== */
+/* ======================================================= */
 @media (max-width: 768px) {
-  .desktop-header { display: none; }
-  .mobile-header { display: block; }
+  /* Oculta/muestra las cabeceras correctas */
+  .desktop-header {
+    display: none;
+  }
+  .mobile-header {
+    display: block;
+  }
+
+  /* 
+    ARREGLO 1: ALARGAR LOS CAMPOS HORIZONTALMENTE
+    Reducimos drásticamente el padding lateral del cuerpo del formulario.
+  */
+  .form-body {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+
+  /* 
+    ARREGLO 2: CONTROLAR EL TAMAÑO DEL TEXTO PARA MÓVILES
+    Puedes cambiar este valor '1rem' al que prefieras (ej: 0.9rem, 15px)
+  */
+  .input-field,
+  .custom-select__control,
+  .custom-select__single-value,
+  .custom-select__placeholder,
+  .custom-select__option {
+    font-size: 0.8rem;
+  }
 }
