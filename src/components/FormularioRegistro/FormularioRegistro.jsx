@@ -3,7 +3,7 @@ import Select, { components } from 'react-select';
 import './FormularioRegistro.css';
 import headerImageDesktop from '../../assets/form-header.png';
 import headerImageMobile from '../../assets/form-header-mobile.png';
-import { FaUser, FaBirthdayCake, FaVenusMars, FaGlobeAmericas, FaListAlt, FaMars, FaVenus, FaCheckCircle } from 'react-icons/fa';
+import { FaUser, FaBirthdayCake, FaVenusMars, FaGlobeAmericas, FaListAlt, FaCheckCircle } from 'react-icons/fa';
 
 const opcionesSexo = [
   { value: 'MASCULINO', label: 'Masculino', },
